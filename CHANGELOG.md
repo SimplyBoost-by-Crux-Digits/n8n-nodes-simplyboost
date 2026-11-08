@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.1.0 (unreleased)
+## 0.1.1 (2026-11-08)
+
+- Published from GitHub Actions with npm provenance (trusted publishing). No code changes.
+
+## 0.1.0 (2026-11-08)
 
 - SimplyBoost node: Message → Send; Knowledge → Add or Update Text, Refresh Website, Get, Get Many;
   Missing Answer → Get Many; Conversation → Get, Get Many, Reply, Resolve, Reopen; Lead → Get, Get Many, Update. Usable as an

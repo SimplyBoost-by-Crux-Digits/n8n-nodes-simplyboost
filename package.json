@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-simplyboost",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "n8n nodes for SimplyBoost: ask your AI support agent, keep its knowledge in step with your systems, and act on handovers, leads and synced knowledge.",
 	"license": "MIT",
 	"homepage": "https://simplyboost.io/docs/api",
