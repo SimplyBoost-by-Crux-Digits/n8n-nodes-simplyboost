@@ -293,6 +293,26 @@ test('lead update sends only the fields given; an emptied field clears it', asyn
 	await assert.rejects(run(empty), /at least one field/);
 });
 
+test('missing answers get many sends the filters', async () => {
+	const ctx = executeContext({
+		params: {
+			resource: 'missingAnswer',
+			operation: 'getAll',
+			chatbot,
+			filters: { status: 'answered', includeTestChats: true },
+			returnAll: true,
+		},
+		routes: {
+			[`GET /chatbots/${BOT}/missing-answers`]: page('missingAnswers', [
+				{ id: 'g1', question: 'IP67?' },
+			]),
+		},
+	});
+	const [out] = await run(ctx);
+	assert.equal(out[0].json.question, 'IP67?');
+	assert.deepEqual(ctx.calls[0].qs, { status: 'answered', includeTestChats: 'true', limit: 100 });
+});
+
 test('lead get many asks for leads with contact details', async () => {
 	const ctx = executeContext({
 		params: { resource: 'lead', operation: 'getAll', chatbot, contactOnly: true, returnAll: true },

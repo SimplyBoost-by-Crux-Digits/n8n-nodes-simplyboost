@@ -2,7 +2,7 @@ import type { INodeProperties } from 'n8n-workflow';
 
 import { chatbotLocator } from '../shared/descriptions';
 
-const RESOURCES = ['message', 'knowledge', 'conversation', 'lead'];
+const RESOURCES = ['message', 'knowledge', 'missingAnswer', 'conversation', 'lead'];
 
 export const resourceProperty: INodeProperties = {
 	displayName: 'Resource',
@@ -14,6 +14,7 @@ export const resourceProperty: INodeProperties = {
 		{ name: 'Knowledge', value: 'knowledge' },
 		{ name: 'Lead', value: 'lead' },
 		{ name: 'Message', value: 'message' },
+		{ name: 'Missing Answer', value: 'missingAnswer' },
 	],
 	default: 'message',
 };
@@ -363,6 +364,55 @@ const conversation: INodeProperties[] = [
 	},
 ];
 
+const missingAnswer: INodeProperties[] = [
+	{
+		displayName: 'Operation',
+		name: 'operation',
+		type: 'options',
+		noDataExpression: true,
+		displayOptions: { show: { resource: ['missingAnswer'] } },
+		options: [
+			{
+				name: 'Get Many',
+				value: 'getAll',
+				action: 'Get many missing answers',
+				description:
+					'List questions the AI agent could not answer, most recent first: what to add to its knowledge',
+			},
+		],
+		default: 'getAll',
+	},
+	{
+		displayName: 'Filters',
+		name: 'filters',
+		type: 'collection',
+		placeholder: 'Add Filter',
+		default: {},
+		displayOptions: { show: { resource: ['missingAnswer'], operation: ['getAll'] } },
+		options: [
+			{
+				displayName: 'Status',
+				name: 'status',
+				type: 'options',
+				default: 'open',
+				options: [
+					{ name: 'Answered', value: 'answered' },
+					{ name: 'Ignored', value: 'ignored' },
+					{ name: 'Open', value: 'open' },
+				],
+			},
+			{
+				displayName: 'Include Test Chats',
+				name: 'includeTestChats',
+				type: 'boolean',
+				default: false,
+				description:
+					'Whether to include questions only asked in test chats your team ran in the dashboard',
+			},
+		],
+	},
+];
+
 const leadId: INodeProperties = {
 	displayName: 'Lead ID',
 	name: 'leadId',
@@ -420,7 +470,10 @@ const paging: INodeProperties[] = [
 		default: false,
 		description: 'Whether to return all results or only up to a given limit',
 		displayOptions: {
-			show: { resource: ['knowledge', 'conversation', 'lead'], operation: ['getAll'] },
+			show: {
+				resource: ['knowledge', 'missingAnswer', 'conversation', 'lead'],
+				operation: ['getAll'],
+			},
 		},
 	},
 	{
@@ -432,7 +485,7 @@ const paging: INodeProperties[] = [
 		description: 'Max number of results to return',
 		displayOptions: {
 			show: {
-				resource: ['knowledge', 'conversation', 'lead'],
+				resource: ['knowledge', 'missingAnswer', 'conversation', 'lead'],
 				operation: ['getAll'],
 				returnAll: [false],
 			},
@@ -448,5 +501,6 @@ export const nodeProperties: INodeProperties[] = [
 	...knowledge,
 	...conversation,
 	...lead,
+	...missingAnswer,
 	...paging,
 ];

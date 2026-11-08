@@ -211,6 +211,14 @@ export async function runOperation(
 		}
 	}
 
+	if (resource === 'missingAnswer' && operation === 'getAll') {
+		const filters = context.getNodeParameter('filters', itemIndex, {}) as IDataObject;
+		const qs: IDataObject = {};
+		if (filters.status) qs.status = filters.status;
+		if (filters.includeTestChats === true) qs.includeTestChats = 'true';
+		return simplyBoostList.call(context, `${bot}/missing-answers`, 'missingAnswers', limit(), qs);
+	}
+
 	if (resource === 'lead') {
 		if (operation === 'getAll') {
 			const contactOnly = context.getNodeParameter('contactOnly', itemIndex) === true;

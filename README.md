@@ -28,6 +28,7 @@ Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes
 | Knowledge | Add or Update Text | Updates the chatbot's text source with this title (ignoring case), or adds it. Unchanged text is not processed again. Built for nightly syncs from an ERP or PIM. |
 | Knowledge | Refresh Website | Reads a website source again now, for example after you publish a page. |
 | Knowledge | Get / Get Many | One knowledge source (optionally with the text read from it), or the list. |
+| Missing Answer | Get Many | Questions the AI agent could not answer (open, answered or ignored): what to add to its knowledge. |
 | Conversation | Get / Get Many | A conversation with its messages, or the most recent conversations. |
 | Conversation | Reply | Replies as a person (the token's owner) in a conversation that is with your team. The reply goes to the customer on the conversation's channel. |
 | Conversation | Resolve / Reopen | Marks a conversation resolved, for example when your helpdesk closes the ticket. |
@@ -55,7 +56,7 @@ The trigger registers its webhook in SimplyBoost when you activate the workflow 
 2. In the SimplyBoost dashboard, go to **Settings → API** and create a token. Only the team owner can create tokens.
 3. Give the token the scopes for what you will use:
    - Message: `conversations:write`
-   - Knowledge: `knowledge:read`, `knowledge:write`
+   - Knowledge and Missing Answer: `knowledge:read`, `knowledge:write`
    - Conversation: `conversations:read`, `conversations:write`
    - Lead: `leads:read`, `leads:write`
    - Trigger: `webhooks:read`, `webhooks:write`
@@ -72,7 +73,7 @@ The trigger needs n8n to be reachable at a public `https://` address: SimplyBoos
 
 ## Usage
 
-- **Limits.** The API allows 120 requests a minute per token. The node waits and retries when SimplyBoost says it is busy (HTTP 429). An account can have at most 10 webhooks; each active SimplyBoost Trigger uses one, and so does a trigger while n8n listens for a test event.
+- **Limits.** The API allows 120 requests a minute per token. The node waits and retries when SimplyBoost says it is busy (HTTP 429). An account can have at most 25 webhooks; each active SimplyBoost Trigger uses one, and so does a trigger while n8n listens for a test event.
 - **Retries without duplicates.** Message → Send and Conversation → Reply take an **Idempotency Key** option. Use the ID of the email, ticket or comment you are answering: if the step runs again with the same key, SimplyBoost returns the first result instead of asking or sending twice.
 - **Messages count toward your plan.** Each Message → Send is one message of your monthly allowance, like a chat on your website.
 - **Add or Update Text** matches on the title. Keep one title per document (for example `Price list 2026 - spare parts`). If two text sources share a title the step stops and says so.
