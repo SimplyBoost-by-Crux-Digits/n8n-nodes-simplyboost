@@ -1,6 +1,6 @@
 # SimplyBoost voor n8n (Nederlands)
 
-De volledige handleiding staat in het Engels in [README.md](README.md); n8n vraagt Engelstalige documentatie bij community nodes. Hieronder de korte versie.
+De volledige handleiding staat in het Engels in [README.md](../README.md); n8n vraagt Engelstalige documentatie bij community nodes. Hieronder de korte versie.
 
 **Wat het doet.** Met dit pakket koppel je SimplyBoost aan je eigen systemen in n8n:
 
