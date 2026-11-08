@@ -1,0 +1,112 @@
+{
+  "name": "SimplyBoost: email the service desk when a conversation is handed over",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Handover alert\nWhen the AI agent hands a conversation to your team, this emails the full transcript with the ticket code. Swap the email step for Microsoft Teams, Slack or your helpdesk.",
+        "height": 220,
+        "width": 520
+      },
+      "name": "About this workflow",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -260
+      ]
+    },
+    {
+      "parameters": {
+        "events": [
+          "conversation.escalated"
+        ],
+        "chatbotScope": "all",
+        "options": {}
+      },
+      "name": "Handed to team",
+      "type": "n8n-nodes-simplyboost.simplyBoostTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "credentials": {
+        "simplyBoostApi": {
+          "id": "",
+          "name": "SimplyBoost API"
+        }
+      },
+      "webhookId": ""
+    },
+    {
+      "parameters": {
+        "resource": "conversation",
+        "operation": "get",
+        "chatbot": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.data.conversation.chatbotId }}"
+        },
+        "threadId": "={{ $json.data.conversation.threadId }}",
+        "simplify": true
+      },
+      "name": "Get the conversation",
+      "type": "n8n-nodes-simplyboost.simplyBoost",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ],
+      "credentials": {
+        "simplyBoostApi": {
+          "id": "",
+          "name": "SimplyBoost API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "assistant@example.com",
+        "toEmail": "servicedesk@example.com",
+        "subject": "=Ticket {{ $json.ticketCode }}: a customer needs a person",
+        "emailFormat": "text",
+        "text": "={{ $json.messages.map(m => m.role + ': ' + m.text).join('\\n\\n') }}",
+        "options": {}
+      },
+      "name": "Email the service desk",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        440,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Handed to team": {
+      "main": [
+        [
+          {
+            "node": "Get the conversation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the conversation": {
+      "main": [
+        [
+          {
+            "node": "Email the service desk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

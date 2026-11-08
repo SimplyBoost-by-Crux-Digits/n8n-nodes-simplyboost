@@ -1,0 +1,75 @@
+{
+  "name": "SimplyBoost: send unanswered questions to a product expert",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Missing answers to an expert\nEach new question the AI agent could not answer goes to the person who knows. Their answer, added under Missing answers, teaches the agent.",
+        "height": 220,
+        "width": 520
+      },
+      "name": "About this workflow",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -260
+      ]
+    },
+    {
+      "parameters": {
+        "events": [
+          "question.unanswered"
+        ],
+        "chatbotScope": "all",
+        "options": {}
+      },
+      "name": "Question not answered",
+      "type": "n8n-nodes-simplyboost.simplyBoostTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "credentials": {
+        "simplyBoostApi": {
+          "id": "",
+          "name": "SimplyBoost API"
+        }
+      },
+      "webhookId": ""
+    },
+    {
+      "parameters": {
+        "fromEmail": "assistant@example.com",
+        "toEmail": "product-expert@example.com",
+        "subject": "=Customers asked something we cannot answer yet",
+        "emailFormat": "text",
+        "text": "=Question: {{ $json.data.question.question }}\nAsked {{ $json.data.question.timesAsked }} time(s), on: {{ $json.data.question.channels.join(', ') }}\n\nAdd the answer in SimplyBoost under Knowledge base \u2192 Missing answers.",
+        "options": {}
+      },
+      "name": "Ask the expert",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        220,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Question not answered": {
+      "main": [
+        [
+          {
+            "node": "Ask the expert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

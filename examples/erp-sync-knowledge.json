@@ -1,0 +1,105 @@
+{
+  "name": "SimplyBoost: sync product texts from your ERP every night",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Nightly knowledge sync\nReplace the HTTP Request with your ERP, PIM or database. It should return one item per document with `title` and `text` (for example one per product family or price list). SimplyBoost updates the text source with the same title or adds it; unchanged text is not processed again.",
+        "height": 220,
+        "width": 520
+      },
+      "name": "About this workflow",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -260
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 2
+            }
+          ]
+        }
+      },
+      "name": "Every night",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://erp.example.com/api/product-texts",
+        "options": {}
+      },
+      "name": "Get product texts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "knowledge",
+        "operation": "upsertText",
+        "chatbot": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "title": "={{ $json.title }}",
+        "text": "={{ $json.text }}",
+        "options": {}
+      },
+      "name": "Add or update in SimplyBoost",
+      "type": "n8n-nodes-simplyboost.simplyBoost",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ],
+      "credentials": {
+        "simplyBoostApi": {
+          "id": "",
+          "name": "SimplyBoost API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every night": {
+      "main": [
+        [
+          {
+            "node": "Get product texts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get product texts": {
+      "main": [
+        [
+          {
+            "node": "Add or update in SimplyBoost",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

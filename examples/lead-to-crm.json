@@ -1,0 +1,75 @@
+{
+  "name": "SimplyBoost: send new leads to your CRM",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## New leads to your CRM\nReplace the HTTP Request with your CRM's node (HubSpot, Pipedrive, Salesforce, Odoo...). Use SimplyBoost \u2192 Lead \u2192 Update afterwards to mark a lead converted.",
+        "height": 220,
+        "width": 520
+      },
+      "name": "About this workflow",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -260
+      ]
+    },
+    {
+      "parameters": {
+        "events": [
+          "lead.captured"
+        ],
+        "chatbotScope": "all",
+        "options": {}
+      },
+      "name": "Lead captured",
+      "type": "n8n-nodes-simplyboost.simplyBoostTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "credentials": {
+        "simplyBoostApi": {
+          "id": "",
+          "name": "SimplyBoost API"
+        }
+      },
+      "webhookId": ""
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://crm.example.com/api/contacts",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ name: $json.data.lead.name, email: $json.data.lead.email, phone: $json.data.lead.phone, company: $json.data.lead.company, source: 'SimplyBoost ' + $json.data.lead.channel }) }}",
+        "options": {}
+      },
+      "name": "Create the contact in your CRM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Lead captured": {
+      "main": [
+        [
+          {
+            "node": "Create the contact in your CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
