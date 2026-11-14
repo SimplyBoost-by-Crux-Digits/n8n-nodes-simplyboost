@@ -89,13 +89,6 @@ export class SimplyBoostTrigger implements INodeType {
 		],
 		properties: [
 			{
-				displayName:
-					'SimplyBoost sends events only to a public https:// address. A token limited to some chatbots cannot add webhooks; use one that covers every chatbot and has the webhooks:read and webhooks:write scopes.',
-				name: 'notice',
-				type: 'notice',
-				default: '',
-			},
-			{
 				displayName: 'Events',
 				name: 'events',
 				type: 'multiOptions',

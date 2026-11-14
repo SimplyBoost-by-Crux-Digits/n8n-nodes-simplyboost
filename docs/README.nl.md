@@ -17,6 +17,7 @@ De volledige handleiding staat in het Engels in [README.md](../README.md); n8n v
 **Goed om te weten.**
 
 - De trigger werkt alleen als n8n bereikbaar is op een openbaar `https://`-adres.
+- Voor de trigger heeft het token de scopes `webhooks:read` en `webhooks:write` nodig, en het mag niet beperkt zijn tot enkele chatbots: webhooks gelden voor alle chatbots van het account.
 - Elke vraag via **Message → Send** telt als één bericht van je maandelijkse bundel.
 - Gebruik bij Send en Reply een **Idempotency Key** (bijvoorbeeld het ticketnummer), zodat een herhaalde stap niets dubbel stuurt.
 - Testgesprekken uit het dashboard starten de workflow niet, tenzij je **Include Test Chats** aanzet.

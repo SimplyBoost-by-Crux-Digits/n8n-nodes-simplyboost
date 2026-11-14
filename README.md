@@ -50,6 +50,12 @@ Starts a workflow on these events. Choose one or more, for all chatbots or one:
 
 The trigger registers its webhook in SimplyBoost when you activate the workflow and removes it when you deactivate it. Every event is signed; the node checks the signature (HMAC-SHA256) and refuses anything else. Test chats your team runs in the dashboard are left out unless you switch on **Include Test Chats** (they are always passed on while n8n listens for a test event).
 
+#### Before you use the trigger
+
+- **A public https:// address.** SimplyBoost sends events only to a public `https://` address. It refuses `http://`, `localhost` and private or internal addresses. On self-hosted n8n, set `WEBHOOK_URL` to the instance's public `https://` address.
+- **A token that covers every chatbot.** Webhooks carry events for every chatbot in the account, so a token limited to some chatbots cannot read, add or remove them. Use a token that is not limited to some chatbots.
+- **The webhook scopes.** The token needs `webhooks:read` and `webhooks:write`.
+
 ## Credentials
 
 1. You need a SimplyBoost account on the **Growth, Pro or Enterprise** plan; the API is part of those plans.

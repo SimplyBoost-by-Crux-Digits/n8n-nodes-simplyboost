@@ -28,7 +28,7 @@ export class SimplyBoostApi implements ICredentialType {
 			required: true,
 			placeholder: 'e.g. sb_live_...',
 			description:
-				'Create a token in the SimplyBoost dashboard under Settings → API. The API is included in the Growth, Pro and Enterprise plans.',
+				'Create a token in the SimplyBoost dashboard under Settings → API. The API is included in the Growth, Pro and Enterprise plans. For the SimplyBoost Trigger, the token needs the webhooks:read and webhooks:write scopes and must cover every chatbot.',
 		},
 		{
 			displayName: 'API URL',
